@@ -1,4 +1,4 @@
-# TF_vpshere_Labs
+# tf-vpshere-labs
 
 This repo provides Terraform code for building Cisco Lab scenarios in vSphere environment
 
