@@ -23,7 +23,7 @@ folder: S1-4_routers_in_a_row
 
 
 # Scenario 2
-folder: S2-DC_2s_3L
+folder: S2-DC_2S_3L
 
 <img width="724" alt="image" src="https://github.com/user-attachments/assets/067c4afe-9fd1-4555-8999-3f59695b6633">
 
