@@ -1,0 +1,10 @@
+# setup envirnment variables:
+
+export TF_VAR_vc_user=<username>
+export TF_VAR_vc_password=<password">
+export TF_VAR_vc_server=<vcenter_server>
+export TF_VAR_vc_dc=<dc name>>
+export TF_VAR_vc_dvs=<dvs name>
+export TF_VAR_vc_pool=<cluster/Resources>
+export TF_VAR_vc_datastore=<datastore name>
+export TF_VAR_vc_mng=<management DPG name>

@@ -1,0 +1,15 @@
+# Template is without interfaces - after tetrraform deployment, manual configuration of G1 on each router is necessary
+
+# vCenter web console to each router:
+ena
+conf t
+hostname Rx
+interface G1
+ ip address x.x.x.x 255.255.255.0
+ no shut
+ip route 0.0.0.0 0.0.0.0 x.x.x.x
+username admin privilege 15 secret <password>
+line vty 0 4
+ login local
+
+# now router should be accessible via SSH

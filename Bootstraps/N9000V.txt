@@ -1,0 +1,36 @@
+# template preparation:
+
+# When N9300V OVA run first time, it is necessary to connect via console, but web nor network console didn't work. (Network serial because of license)
+# solution - serial console via pipe to VM windows machine !!!
+ \\.\pipe\namedpipe
+ Nexus(server) -> VM(client)
+
+# first time it wass necessary to boot manualy from loader
+loader > boot nxos64-cs.10.5.1.F.bin
+
+# basic common setup for Nexus, All VMs from this template will inherit this config
+conf t
+boot nxos nxos64-cs.10.5.1.F.bin
+interface mgmt0
+ ip address dhcp
+ no shut
+copy runn start
+
+# delete pipe from template - otherwise new VMs from template will want use the same pipe
+
+# convert VM to Template
+
+#################
+
+# DHCP server cannot run on Cisco switch !!! - all N9300V send the same 'client-id' so they obtain the same IP
+# I used DHCP on Alpine with following option, which ignore client-id sent by nexuses:
+ignore client-updates;
+
+# after Nexuses boot, you can find assigned IPs + MAC addresses:
+cat /var/lib/dhcp/dhcpd.leases
+
+################
+# after booting new N9300V VMs was neccessary:
+ mac-address 0094.7e3a.1b08
+ no  mac-address 0094.7e3a.1b08
+# on each L3 interface - probably bug...

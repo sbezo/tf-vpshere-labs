@@ -1,0 +1,23 @@
+# template preparation:
+
+ISO: alpine-virt-3.20.2-x86_64.iso
+    boot - BIOS
+    1CPU, 4G RAM, 16G Disk
+
+passwd root
+adduser alpine
+
+cat > /etc/network/interfaces
+auto lo
+iface lo inet loopback
+auto eth0
+iface eth0 inet dhcp
+
+service networking restart
+
+apk add openssh
+rc-update add sshd
+rc-service sshd start
+
+
+
