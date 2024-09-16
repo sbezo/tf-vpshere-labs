@@ -59,6 +59,8 @@ resource "vsphere_distributed_port_group" "LINK-B" {
   allow_mac_changes = true
   allow_promiscuous = true
   security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
 }
 
 # Create a new distributed port group - Link-C
@@ -70,6 +72,8 @@ resource "vsphere_distributed_port_group" "LINK-C" {
   allow_mac_changes = true
   allow_promiscuous = true
   security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
 }
 
 # Create a new distributed port group - Link-D
@@ -81,6 +85,8 @@ resource "vsphere_distributed_port_group" "LINK-D" {
   allow_mac_changes = true
   allow_promiscuous = true
   security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
 }
 
 # Create a new distributed port group - Link-E
@@ -92,6 +98,8 @@ resource "vsphere_distributed_port_group" "LINK-E" {
   allow_mac_changes = true
   allow_promiscuous = true
   security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
 }
 
 # Create a new distributed port group - Link-F
@@ -103,6 +111,8 @@ resource "vsphere_distributed_port_group" "LINK-F" {
   allow_mac_changes = true
   allow_promiscuous = true
   security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
 }
 
 ### Nexuses ###
