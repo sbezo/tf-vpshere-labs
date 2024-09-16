@@ -19,5 +19,6 @@ apk add openssh
 rc-update add sshd
 rc-service sshd start
 
-
+# operate dhcp server on Alpine
+cat /var/lib/dhcp/dhcpd.leases
 

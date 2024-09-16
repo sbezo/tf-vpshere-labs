@@ -34,3 +34,9 @@ cat /var/lib/dhcp/dhcpd.leases
  mac-address 0094.7e3a.1b08
  no  mac-address 0094.7e3a.1b08
 # on each L3 interface - probably bug...
+
+
+# VM -IP pairing
+esxcli network vm list
+esxcli network vm port list -w <ID>
+MAC address of first interface <-> dhcplease/MAC/IP
