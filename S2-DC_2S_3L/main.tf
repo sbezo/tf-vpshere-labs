@@ -34,6 +34,11 @@ data "vsphere_virtual_machine" "N9300V" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+data "vsphere_virtual_machine" "Alpine" {
+  name          = "SB-Alpine-Template"
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 #####################################################################################
 
 ### Links ###
@@ -78,7 +83,7 @@ resource "vsphere_distributed_port_group" "LINK-C" {
 
 # Create a new distributed port group - Link-D
 resource "vsphere_distributed_port_group" "LINK-D" {
-  name               = "VC-DPG-VLAN1160-LINK-D"
+  name               = "VC-DPG-VLAN1163-LINK-D"
   vlan_id            = 1163
   distributed_virtual_switch_uuid = data.vsphere_distributed_virtual_switch.dvs.id
   allow_forged_transmits = true
@@ -91,7 +96,7 @@ resource "vsphere_distributed_port_group" "LINK-D" {
 
 # Create a new distributed port group - Link-E
 resource "vsphere_distributed_port_group" "LINK-E" {
-  name               = "VC-DPG-VLAN1161-LINK-E"
+  name               = "VC-DPG-VLAN1164-LINK-E"
   vlan_id            = 1164
   distributed_virtual_switch_uuid = data.vsphere_distributed_virtual_switch.dvs.id
   allow_forged_transmits = true
@@ -104,8 +109,47 @@ resource "vsphere_distributed_port_group" "LINK-E" {
 
 # Create a new distributed port group - Link-F
 resource "vsphere_distributed_port_group" "LINK-F" {
-  name               = "VC-DPG-VLAN1162-LINK-F"
+  name               = "VC-DPG-VLAN1165-LINK-F"
   vlan_id            = 1165
+  distributed_virtual_switch_uuid = data.vsphere_distributed_virtual_switch.dvs.id
+  allow_forged_transmits = true
+  allow_mac_changes = true
+  allow_promiscuous = true
+  security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
+}
+
+# Create a new distributed port group - Link-G
+resource "vsphere_distributed_port_group" "LINK-G" {
+  name               = "VC-DPG-VLAN1166-LINK-G"
+  vlan_id            = 1166
+  distributed_virtual_switch_uuid = data.vsphere_distributed_virtual_switch.dvs.id
+  allow_forged_transmits = true
+  allow_mac_changes = true
+  allow_promiscuous = true
+  security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
+}
+
+# Create a new distributed port group - Link-H
+resource "vsphere_distributed_port_group" "LINK-H" {
+  name               = "VC-DPG-VLAN1167-LINK-H"
+  vlan_id            = 1167
+  distributed_virtual_switch_uuid = data.vsphere_distributed_virtual_switch.dvs.id
+  allow_forged_transmits = true
+  allow_mac_changes = true
+  allow_promiscuous = true
+  security_policy_override_allowed = true
+  active_uplinks = ["VC-Uplink 1"]
+  standby_uplinks = ["VC-Uplink 2"]
+}
+
+# Create a new distributed port group - Link-I
+resource "vsphere_distributed_port_group" "LINK-I" {
+  name               = "VC-DPG-VLAN1168-LINK-I"
+  vlan_id            = 1168
   distributed_virtual_switch_uuid = data.vsphere_distributed_virtual_switch.dvs.id
   allow_forged_transmits = true
   allow_mac_changes = true
@@ -235,6 +279,10 @@ resource "vsphere_virtual_machine" "L1" {
   network_id   = vsphere_distributed_port_group.LINK-D.id
   adapter_type = "e1000"
 }
+ network_interface {
+  network_id   = vsphere_distributed_port_group.LINK-G.id
+  adapter_type = "e1000"
+}
 
 
  # I had to create small secondary disk and then delete it through provision script, because N9300V won't boot from clonned sata disk - from Template
@@ -278,6 +326,10 @@ resource "vsphere_virtual_machine" "L2" {
  }
  network_interface {
   network_id   = vsphere_distributed_port_group.LINK-E.id
+  adapter_type = "e1000"
+}
+ network_interface {
+  network_id   = vsphere_distributed_port_group.LINK-H.id
   adapter_type = "e1000"
 }
 
@@ -324,6 +376,10 @@ resource "vsphere_virtual_machine" "L3" {
   network_id   = vsphere_distributed_port_group.LINK-F.id
   adapter_type = "e1000"
 }
+ network_interface {
+  network_id   = vsphere_distributed_port_group.LINK-I.id
+  adapter_type = "e1000"
+}
 
 
  # I had to create small secondary disk and then delete it through provision script, because N9300V won't boot from clonned sata disk - from Template
@@ -344,5 +400,90 @@ resource "vsphere_virtual_machine" "L3" {
  }
 }
 
+# create linux Alpine1
+resource "vsphere_virtual_machine" "A1" {
+ name             = "SB-Alpine-01"
+ resource_pool_id = data.vsphere_resource_pool.pool.id
+ datastore_id     = data.vsphere_datastore.datastore.id
+ num_cpus = 1
+ memory   = 4096
+ guest_id = data.vsphere_virtual_machine.Alpine.guest_id
+ folder = "USER_VMs/SB"
+ wait_for_guest_net_timeout = 0
 
+ network_interface {
+   network_id   = data.vsphere_network.MNG.id
+   adapter_type = "vmxnet3"
+ }
+  network_interface {
+   network_id   = vsphere_distributed_port_group.LINK-G.id
+   adapter_type = "vmxnet3"
+ }
+ disk {
+   label = "Hard disk 1"
+   size             = 16
+   thin_provisioned = true
+ }
+ clone {
+   template_uuid = data.vsphere_virtual_machine.Alpine.id
+ }
+}
+
+# create linux Alpine2
+resource "vsphere_virtual_machine" "A2" {
+ name             = "SB-Alpine-02"
+ resource_pool_id = data.vsphere_resource_pool.pool.id
+ datastore_id     = data.vsphere_datastore.datastore.id
+ num_cpus = 1
+ memory   = 4096
+ guest_id = data.vsphere_virtual_machine.Alpine.guest_id
+ folder = "USER_VMs/SB"
+ wait_for_guest_net_timeout = 0
+
+ network_interface {
+   network_id   = data.vsphere_network.MNG.id
+   adapter_type = "vmxnet3"
+ }
+  network_interface {
+   network_id   = vsphere_distributed_port_group.LINK-H.id
+   adapter_type = "vmxnet3"
+ }
+ disk {
+   label = "Hard disk 1"
+   size             = 16
+   thin_provisioned = true
+ }
+ clone {
+   template_uuid = data.vsphere_virtual_machine.Alpine.id
+ }
+}
+
+# create linux Alpine3
+resource "vsphere_virtual_machine" "A3" {
+ name             = "SB-Alpine-03"
+ resource_pool_id = data.vsphere_resource_pool.pool.id
+ datastore_id     = data.vsphere_datastore.datastore.id
+ num_cpus = 1
+ memory   = 4096
+ guest_id = data.vsphere_virtual_machine.Alpine.guest_id
+ folder = "USER_VMs/SB"
+ wait_for_guest_net_timeout = 0
+
+ network_interface {
+   network_id   = data.vsphere_network.MNG.id
+   adapter_type = "vmxnet3"
+ }
+  network_interface {
+   network_id   = vsphere_distributed_port_group.LINK-I.id
+   adapter_type = "vmxnet3"
+ }
+ disk {
+   label = "Hard disk 1"
+   size             = 16
+   thin_provisioned = true
+ }
+ clone {
+   template_uuid = data.vsphere_virtual_machine.Alpine.id
+ }
+}
 
