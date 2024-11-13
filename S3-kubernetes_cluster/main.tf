@@ -70,6 +70,7 @@ resource "vsphere_virtual_machine" "SB-K8Node-01" {
       }
 
       ipv4_gateway = "10.208.116.1"
+      dns_server_list = ["8.8.8.8", "8.8.4.4"]
     }
   }
 }
@@ -107,6 +108,7 @@ resource "vsphere_virtual_machine" "SB-K8Node-02" {
       }
 
       ipv4_gateway = "10.208.116.1"
+      dns_server_list = ["8.8.8.8", "8.8.4.4"]
     }
   }
 }
