@@ -2,8 +2,11 @@
 
 # When N9300V OVA run first time, it is necessary to connect via console, but web nor network console didn't work. (Network serial because of license)
 # solution - serial console via pipe to VM windows machine !!!
- \\.\pipe\namedpipe
- Nexus(server) -> VM(client)
+-> shut down VM -> Edit VM settings -> Add serial port -> Use named pipe ->
+Pipe name (na oboch rovnaka):  \\.\pipe\namedpipe
+Nexus(server) -> VM(client)
+Near end, Far end: VM
+# on Windows machine run terminal (putty) with serial connection to named pipe
 
 # first time it wass necessary to boot manualy from loader
 loader > boot nxos64-cs.10.5.1.F.bin
@@ -37,6 +40,6 @@ cat /var/lib/dhcp/dhcpd.leases
 
 
 # VM -IP pairing
-esxcli network vm list
+esxcli network vm list | grep N9
 esxcli network vm port list -w <ID>
 MAC address of first interface <-> dhcplease/MAC/IP

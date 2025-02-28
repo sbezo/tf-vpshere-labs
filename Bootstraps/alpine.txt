@@ -13,6 +13,13 @@ iface lo inet loopback
 auto eth0
 iface eth0 inet dhcp
 
+# or:
+auto eth1
+iface eth1 inet static
+  address 192.168.100.2
+  netmask 255.255.255.0
+  gateway 192.168.100.1
+
 service networking restart
 
 apk add openssh

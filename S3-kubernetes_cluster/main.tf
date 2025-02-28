@@ -112,3 +112,41 @@ resource "vsphere_virtual_machine" "SB-K8Node-02" {
     }
   }
 }
+
+# create kubernetes node SB-K8Node-03
+resource "vsphere_virtual_machine" "SB-K8Node-03" {
+  name             = "SB-K8Node-03"
+  resource_pool_id = data.vsphere_resource_pool.pool.id
+  datastore_id     = data.vsphere_datastore.datastore.id
+  num_cpus = 2
+  memory   = 4096
+  guest_id = data.vsphere_virtual_machine.SB-Ubuntu-Template.guest_id
+  folder = "USER_VMs/SB"
+  wait_for_guest_net_timeout = 0  
+  network_interface {
+    network_id   = data.vsphere_network.MNG.id
+    adapter_type = "vmxnet3"
+  } 
+  disk {
+    label = "Hard disk 1"
+    size             = 32
+    thin_provisioned = true
+  }
+
+  clone {
+    template_uuid = data.vsphere_virtual_machine.SB-Ubuntu-Template.id
+    customize {
+      linux_options {
+        host_name = "SB-K8Node-03"
+        domain    = "lab.local"
+      }
+      network_interface {
+        ipv4_address = "10.208.116.129"
+        ipv4_netmask = 24
+      }
+
+      ipv4_gateway = "10.208.116.1"
+      dns_server_list = ["8.8.8.8", "8.8.4.4"]
+    }
+  }
+}
