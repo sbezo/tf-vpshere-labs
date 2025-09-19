@@ -1,4 +1,4 @@
-## What is this repository for:   
+## Notes to this repository:   
 
 - This Repo provides terraform `main.tf` and related `variables.tf` files for different scenarios - LABs.
 - All scenarios are suppose to run in VMware vSphere environment.    
