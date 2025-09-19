@@ -41,6 +41,8 @@ data "vsphere_virtual_machine" "ASAv" {
 
 ### ASAv ###
 
+# this not work yet - boot loop uefi signature failure
+
 
 
 # create ASAv
